@@ -1,0 +1,215 @@
+[
+    {
+        "id": "tab1",
+        "type": "tab",
+        "label": "Smart Parking"
+    },
+    {
+        "id": "slot1_input",
+        "type": "ui_numeric",
+        "z": "tab1",
+        "name": "Slot 1",
+        "label": "Slot 1",
+        "tooltip": "",
+        "group": "ui_group1",
+        "order": 1,
+        "width": 3,
+        "height": 1,
+        "wrap": false,
+        "passthru": true,
+        "topic": "",
+        "topicType": "str",
+        "format": "",
+        "min": "0",
+        "max": "1",
+        "step": "",
+        "className": "",
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "store_slot1"
+            ]
+        ]
+    },
+    {
+        "id": "slot2_input",
+        "type": "ui_numeric",
+        "z": "tab1",
+        "name": "Slot 2",
+        "label": "Slot 2",
+        "tooltip": "",
+        "group": "ui_group1",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "wrap": false,
+        "passthru": true,
+        "topic": "",
+        "topicType": "str",
+        "format": "",
+        "min": "0",
+        "max": "1",
+        "step": "",
+        "className": "",
+        "x": 120,
+        "y": 160,
+        "wires": [
+            [
+                "store_slot2"
+            ]
+        ]
+    },
+    {
+        "id": "store_slot1",
+        "type": "function",
+        "z": "tab1",
+        "name": "Store Slot 1",
+        "func": "flow.set(\"slot1\", Number(msg.payload));\nreturn msg;",
+        "outputs": 1,
+        "x": 320,
+        "y": 100,
+        "wires": [
+            [
+                "calculate"
+            ]
+        ]
+    },
+    {
+        "id": "store_slot2",
+        "type": "function",
+        "z": "tab1",
+        "name": "Store Slot 2",
+        "func": "flow.set(\"slot2\", Number(msg.payload));\nreturn msg;",
+        "outputs": 1,
+        "x": 320,
+        "y": 160,
+        "wires": [
+            [
+                "calculate"
+            ]
+        ]
+    },
+    {
+        "id": "calculate",
+        "type": "function",
+        "z": "tab1",
+        "name": "Calculate Available Slots",
+        "func": "let slot1 = flow.get(\"slot1\") || 0;\nlet slot2 = flow.get(\"slot2\") || 0;\n\nlet total = 2;\nlet available = total - (slot1 + slot2);\n\nmsg.payload = available;\nreturn msg;",
+        "outputs": 1,
+        "x": 550,
+        "y": 130,
+        "wires": [
+            [
+                "gauge",
+                "status_text"
+            ]
+        ]
+    },
+    {
+        "id": "gauge",
+        "type": "ui_gauge",
+        "z": "tab1",
+        "name": "Available Slots",
+        "group": "ui_group1",
+        "order": 3,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Available Slots 🚗",
+        "label": "slots",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 2,
+        "colors": [
+            "#00ff00",
+            "#ffff00",
+            "#ff0000"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 800,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "status_text",
+        "type": "ui_text",
+        "z": "tab1",
+        "group": "ui_group1",
+        "order": 4,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "Parking Status",
+        "format": "{{msg.payload}} slots free",
+        "layout": "",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 800,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "gate_switch",
+        "type": "ui_switch",
+        "z": "tab1",
+        "name": "Gate Control",
+        "label": "Gate 🚧",
+        "group": "ui_group1",
+        "order": 5,
+        "width": 3,
+        "height": 1,
+        "onvalue": "OPEN",
+        "offvalue": "CLOSE",
+        "x": 120,
+        "y": 240,
+        "wires": [
+            [
+                "gate_text"
+            ]
+        ]
+    },
+    {
+        "id": "gate_text",
+        "type": "ui_text",
+        "z": "tab1",
+        "group": "ui_group1",
+        "order": 6,
+        "width": 3,
+        "height": 1,
+        "label": "Gate Status",
+        "format": "{{msg.payload}}",
+        "x": 320,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "ui_group1",
+        "type": "ui_group",
+        "name": "📊 Live Status",
+        "tab": "ui_tab1",
+        "order": 1,
+        "width": "6"
+    },
+    {
+        "id": "ui_tab1",
+        "type": "ui_tab",
+        "name": "🚗 Parking Dashboard",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "64ddb97ed037df4d",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
