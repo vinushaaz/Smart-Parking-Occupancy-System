@@ -1,8 +1,3 @@
-Let’s turn your project into something that *looks professional on GitHub* 😄🔥
-You can copy this directly into your `README.md`.
-
----
-
 # 🚗 Smart Parking Occupancy System
 
 ## 📌 Overview
